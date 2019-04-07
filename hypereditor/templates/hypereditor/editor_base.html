@@ -1,0 +1,21 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>HyperEditor</title>
+    <link rel="stylesheet" href="{% static 'hypereditor/hyper_editor.css' %}" />
+    {% for st in user_stylesheets %}
+        <link rel="stylesheet" href="{% static st %}" />
+    {% endfor %}
+</head>
+<body>
+
+{% block editor %}
+
+{% endblock %}
+</body>
+</html>

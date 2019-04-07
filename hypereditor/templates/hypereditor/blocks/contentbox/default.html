@@ -1,0 +1,51 @@
+<div class="contentBoxWrap" id="{{ obj.id }}">
+    {% if obj.settings.imageOrientation == 'left' %}
+    <div class="row">
+        <div class="col col-md-4">
+            <img src="{{ obj.settings.image.url }}" class="img-fluid" />
+        </div>
+        <div class="col col-md-8">
+            <h2>{{ obj.settings.title }} <small>{{ obj.settings.subtitle }}</small></h2>
+            <div class="desc">
+                {{ obj.settings.description|safe }}
+            </div>
+        </div>
+    </div>
+    {% elif obj.settings.imageOrientation == 'right' %}
+    <div class="row">
+        <div class="col col-md-8">
+            <h2>{{ obj.settings.title }} <small>{{ obj.settings.subtitle }}</small></h2>
+            <div class="desc">
+                {{ obj.settings.description|safe }}
+            </div>
+        </div>
+        <div class="col col-md-4">
+            <img src="{{ obj.settings.image.url }}" class="img-fluid" />
+        </div>
+    </div>
+    {% elif obj.settings.imageOrientation == 'top' %}
+    <div class="row">
+        <div class="col col-md-12">
+            <img src="{{ obj.settings.image.url }}" class="img-fluid" />
+        </div>
+        <div class="col col-md-12">
+            <h2>{{ obj.settings.title }} <small>{{ obj.settings.subtitle }}</small></h2>
+            <div class="desc">
+                {{ obj.settings.description|safe }}
+            </div>
+        </div>
+    </div>
+    {% else %}
+    <div class="row">
+        <div class="col col-md-12">
+            <h2>{{ obj.settings.title }} <small>{{ obj.settings.subtitle }}</small></h2>
+            <div class="desc">
+                {{ obj.settings.description|safe }}
+            </div>
+        </div>
+        <div class="col col-md-12">
+            <img src="{{ obj.settings.image.url }}" class="img-fluid" />
+        </div>
+    </div>
+    {% endif %}
+</div>

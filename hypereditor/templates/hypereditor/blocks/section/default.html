@@ -1,0 +1,5 @@
+<section id="{{ obj.id }}" {% if obj.general.classes %} class="{{ obj.general.classes }}" {% endif %}>
+    <div class="{% if obj.settings.type == 'Box' %}container{% else %}container-fluid{% endif %}">
+        {{ children }}
+    </div>
+</section>

@@ -1,0 +1,23 @@
+
+<div id="{{ obj.id }}" class="carousel slide {{ obj.general.classes }}" data-ride="carousel">
+        <ol class="carousel-indicators">
+            {% for slider in obj.settings.slides %}
+                <li data-target="#{{ obj.id }}" data-slide-to="{{ forloop.counter0 }}" class="{% if forloop.counter0 == 0 %}active{% endif %}"></li>
+            {% endfor %}
+        </ol>
+        <div class="carousel-inner">
+            {% for slider in obj.settings.slides %}
+                <div class="carousel-item {% if forloop.counter0 == 0 %}active{% endif %}">
+                    <img class="d-block w-100" src="{{ slider.image.url }}">
+                </div>
+            {% endfor %}
+        </div>
+        <a class="carousel-control-prev" href="#{{ obj.id }}" role="button" data-slide="prev">
+            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+            <span class="sr-only">Previous</span>
+        </a>
+        <a class="carousel-control-next" href="#{{ obj.id }}" role="button" data-slide="next">
+            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+            <span class="sr-only">Next</span>
+        </a>
+    </div>

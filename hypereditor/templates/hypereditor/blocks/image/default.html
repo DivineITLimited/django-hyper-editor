@@ -1,0 +1,7 @@
+{% load hyper_tags %}
+
+<div class="imageWrap" id="{{ obj.id }}">
+    <img src="{{ obj.settings.image.url }}" class="img-fluid {% if obj.general.classes %}{{ obj.general.classes }}{% endif %}" id="{{ obj.id }}" />
+</div>
+
+

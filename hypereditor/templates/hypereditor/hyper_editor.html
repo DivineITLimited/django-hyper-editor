@@ -1,0 +1,129 @@
+{% extends 'hypereditor/editor_base.html' %}
+{% load static %}
+
+
+{% block editor %}
+<form method="POST" id="stateForm" style="display: none">
+    {% csrf_token %}
+    <input type="text" name="initialState" id="initialState" value="{{ initialState }}" />
+    <input type="submit" />
+</form>
+<div id="hyperEditor"></div>
+
+<script src="{% static 'hypereditor/hyper_editor.js' %}"></script>
+
+<script>
+
+    function getCookie(name) {
+        var cookieValue = null;
+        if (document.cookie && document.cookie !== '') {
+            var cookies = document.cookie.split(';');
+            for (var i = 0; i < cookies.length; i++) {
+                var cookie = cookies[i].trim();
+                // Does this cookie string begin with the name we want?
+                if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                    break;
+                }
+            }
+        }
+        return cookieValue;
+    }
+
+
+    IMAGE_SEARCH_URL = "{{ image_api_url }}"
+    {% for k, v in js_variables.items %}
+        {{ k }} = `{{ v|safe }}`;
+    {% endfor %}
+
+
+    function parse_query_string(query) {
+        var vars = query.split("&");
+        var query_string = {};
+        for (var i = 0; i < vars.length; i++) {
+          var pair = vars[i].split("=");
+          var key = decodeURIComponent(pair[0]);
+          var value = decodeURIComponent(pair[1]);
+          // If first entry with this name
+          if (typeof query_string[key] === "undefined") {
+            query_string[key] = decodeURIComponent(value);
+            // If second entry with this name
+          } else if (typeof query_string[key] === "string") {
+            var arr = [query_string[key], decodeURIComponent(value)];
+            query_string[key] = arr;
+            // If third or later entry with this name
+          } else {
+            query_string[key].push(decodeURIComponent(value));
+          }
+        }
+        return query_string;
+    }
+
+    var urlParams = parse_query_string(window.location.href.split('?')[1])
+    if (!window.location.origin) {
+        window.location.origin = window.location.protocol + "//"
+            + window.location.hostname
+            + (window.location.port ? ':' + window.location.port : '');
+    }
+
+    function asyncPreview(value, callback) {
+        fetch('{% url "hypereditor:preview" %}', {
+            credentials: "same-origin",
+            method: 'POST',
+            headers: {
+                'Accept': 'application/json, text/plain, */*',
+                'X-CSRFToken': getCookie('csrftoken'),
+                "Content-Type": "application/x-www-form-urlencoded; charset=UTF-8"
+            },
+            body: JSON.stringify(value)
+        }).then(response => response.text())
+        .then(data => {
+            callback(data)
+        })
+    }
+
+    hyperEditor = new HyperEditor('#hyperEditor', {
+        imageSearchApi: IMAGE_SEARCH_URL,
+        preview: asyncPreview {% if block_settings %}, blocks: JSON.parse('{{ block_settings|safe }}') {% endif %}
+    })
+</script>
+
+{% for js_plugin in js_plugins %}
+<script src="{% static js_plugin %}"></script>
+{% endfor %}
+
+<script>
+
+    function bindEvent(element, eventName, eventHandler) {
+        if (element.addEventListener) {
+            element.addEventListener(eventName, eventHandler, false);
+        } else if (element.attachEvent) {
+            element.attachEvent('on' + eventName, eventHandler);
+        }
+    }
+
+    bindEvent(window, 'message', function (e) {
+        if (e.data && e.data.id == urlParams.id) {
+            try {
+                var data_to_init = JSON.parse(e.data.state)
+                init_hyper_editor(JSON.parse(e.data.state))
+            } catch(err) {
+                init_hyper_editor([])
+            }
+        }
+    });
+
+    init_hyper_editor = function (state = []) {
+        if (!state && !(state instanceof Array)) state = []
+        initial_state = state
+        hyperEditor.initialize(initial_state)
+        hyperEditor.addStateChangeListener(function (state) {
+            window.parent.postMessage({
+                id: urlParams.id,
+                state: JSON.stringify(state)
+            }, window.location.origin)
+        })
+    }
+</script>
+
+{% endblock %}
