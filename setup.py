@@ -7,7 +7,7 @@ README = (HERE / "README.md").read_text()
 
 setup(
     name='hypereditor',
-    version='0.1.0-rc1',
+    version='0.1.0-rc.1',
     packages=find_packages(),
     include_package_data=True,
     license='MIT',
