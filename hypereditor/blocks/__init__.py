@@ -26,7 +26,7 @@ def get_block_class_for(block_type):
     return BLOCK_REGISTRY.get(block_type, Block)
 
 
-def get_js_variables():
+def js_variable_str():
     js_variables = {}
     for k, v in BLOCK_REGISTRY.items():
         if issubclass(v, Block):
@@ -35,7 +35,7 @@ def get_js_variables():
             else:
                 to_add = v.JS_VARIABLES
             js_variables.update(to_add)
-    return js_variables
+    return '\n'.join(['%s = `%s`;' % (k, v) for k, v in js_variables.items()])
 
 
 def get_js_plugins():

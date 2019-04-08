@@ -2,7 +2,7 @@ import json
 
 from django.conf import settings
 from django.views.generic import TemplateView
-from hypereditor.blocks import get_js_variables, get_js_plugins
+from hypereditor.blocks import js_variable_str, get_js_plugins
 
 
 class EditorView(TemplateView):
@@ -15,7 +15,7 @@ class EditorView(TemplateView):
         user_stylesheets = getattr(settings, 'HYPER_EDITOR_USER_STYLESHEETS', [])
         context['block_settings'] = json.dumps(block_settings)
         context['user_stylesheets'] = user_stylesheets
-        context['js_variables'] = get_js_variables()
+        context['js_variables'] = js_variable_str
         context['js_plugins'] = get_js_plugins()
         context['image_api_url'] = getattr(settings, 'HYPER_IMAGE_API', '#')
         return context

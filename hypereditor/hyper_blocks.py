@@ -49,5 +49,3 @@ class TabBlock(Block):
                     })
             return total_childes
         return []
-
-
