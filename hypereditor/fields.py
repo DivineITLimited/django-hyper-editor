@@ -39,14 +39,14 @@ class HyperFieldResponse(object):
         rendered_data = ''
         if isinstance(context, template.Context) or isinstance(context, template.RequestContext):
             context = context.flatten()
-        codeRenderer = CodeRenderer()
+        code_renderer = CodeRenderer()
         for item in self.data:
             bl_class = get_block_class_for(item.get('type', 'INVALID_PLUGIN_WITH_NO_TYPE'))
             if bl_class:
-                instance = bl_class(codeRenderer)
-                rendered_data = rendered_data + instance.render(item, context)
+                instance = bl_class(item, code_renderer)
+                rendered_data = rendered_data + instance.render(context)
 
-        rendered_data = codeRenderer.renderCSS() + rendered_data + codeRenderer.renderJS()
+        rendered_data = code_renderer.render_css() + rendered_data + code_renderer.render_js()
         return mark_safe(rendered_data)
 
     def get_prep_value(self):

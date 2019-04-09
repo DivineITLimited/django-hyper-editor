@@ -30,10 +30,10 @@ def js_variable_str():
     js_variables = {}
     for k, v in BLOCK_REGISTRY.items():
         if issubclass(v, Block):
-            if callable(v.JS_VARIABLES):
-                to_add = v.JS_VARIABLES()
+            if callable(v.js_variables):
+                to_add = v.js_variables()
             else:
-                to_add = v.JS_VARIABLES
+                to_add = v.js_variables
             js_variables.update(to_add)
     return '\n'.join(['%s = `%s`;' % (k, v) for k, v in js_variables.items()])
 
@@ -42,11 +42,11 @@ def get_js_plugins():
     js_plugins = []
     for k, v in BLOCK_REGISTRY.items():
         if issubclass(v, Block):
-            if v.JS_PLUGINS is not None:
-                if isinstance(v.JS_PLUGINS, list):
-                    js_plugins = js_plugins + v.JS_PLUGINS
+            if v.js_files is not None:
+                if isinstance(v.js_files, list):
+                    js_plugins = js_plugins + v.js_files
                 else:
-                    js_plugins.append(v.JS_PLUGINS)
+                    js_plugins.append(v.js_files)
     return js_plugins
 
 
