@@ -5,6 +5,8 @@ from hypereditor.blocks import get_block_class_for, register
 @register('column')
 class ColumnBlock(Block):
 
+    external = True
+
     def _build_col_class(self, colSettings):
         col_class = []
         if colSettings:
@@ -34,6 +36,8 @@ class ColumnBlock(Block):
 @register('tab')
 class TabBlock(Block):
 
+    external = True
+
     def get_rendered_children(self, obj, context):
         if obj.get('children') is not None:
 
@@ -49,3 +53,33 @@ class TabBlock(Block):
                     })
             return total_childes
         return []
+
+
+@register('heading')
+class Heading(Block):
+
+    title = 'Heading'
+    description = 'Heading Block'
+
+    schema = {
+        "fields": [
+            {
+                "type": "input",
+                "inputType": "text",
+                "label": "Heading Text",
+                "model": "text"
+            },
+            {
+                "type": "select",
+                "label": "Heading Type",
+                "model": "type",
+                "values": [
+                    "H1", "H2", "H3", "H4", "H5", "H6"
+                ]
+            }
+        ]
+    }
+
+    initial = {
+        "type": 'H3'
+    }

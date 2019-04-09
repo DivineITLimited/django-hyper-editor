@@ -119,6 +119,9 @@
     <script src="{% static js_plugin %}"></script>
     {% endfor %}
 
+    <!- generate simpler blocks -->
+    <script type="text/javascript" src="{% url 'hypereditor:blocks' %}"></script>
+
     <script type="text/javascript">
 
         function bindEvent(element, eventName, eventHandler) {

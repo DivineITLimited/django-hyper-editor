@@ -7,6 +7,7 @@ register = template.Library()
 
 
 class HyperNode(template.Node):
+
     def __init__(self, block_var, extra_context, use_parent_context):
         self.block_var = block_var
         self.extra_context = extra_context

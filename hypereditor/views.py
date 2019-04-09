@@ -1,10 +1,11 @@
 import json
 
 from django.conf import settings
+from django.http.response import HttpResponse
 from django.contrib.auth.mixins import UserPassesTestMixin, LoginRequiredMixin
 from django.views.generic import TemplateView
 
-from hypereditor.blocks import js_variable_str, get_js_plugins
+from hypereditor.blocks import js_variable_str, get_js_plugins, get_simpler_blocks
 
 
 class AuthenticationMixin(UserPassesTestMixin, LoginRequiredMixin):
@@ -41,3 +42,18 @@ class PreviewView(AuthenticationMixin, TemplateView):
         context = super().get_context_data(**kwargs)
         context['value'] = json.loads(request.body)
         return self.render_to_response(context=context)
+
+
+class GenerateBlock(AuthenticationMixin, TemplateView):
+
+    template_name = 'hypereditor/js/blocks.js'
+
+    def options(self, request, *args, **kwargs):
+        response = super().options(request, *args, **kwargs)
+        response['Content-Type'] = 'application/javascript'
+        return response
+
+    def get(self, request, *args, **kwargs):
+        return self.render_to_response(context={
+            'blocks': get_simpler_blocks()
+        })

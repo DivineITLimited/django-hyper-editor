@@ -1,4 +1,5 @@
 from .base import Block
+import json
 from django.conf import settings
 
 BLOCK_REGISTRY = {}
@@ -48,6 +49,15 @@ def get_js_plugins():
                 else:
                     js_plugins.append(v.js_files)
     return js_plugins
+
+
+def get_simpler_blocks():
+    result = {}
+    for k, v in BLOCK_REGISTRY.items():
+        config = v().get_block_config()
+        if config:
+            result[k] = json.dumps(config)
+    return result
 
 
 def register(block_type):

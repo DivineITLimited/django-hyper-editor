@@ -87,16 +87,25 @@ class Block(object):
     # if any js file needs to be initialized
     js_files = None
 
-    def __init__(self, obj, code_renderer):
+    # for simple block following variables can be used
+    external = False
+    title = None
+    description = None
+    schema = None
+    initial = None
+    general_initial = None
+    styles = None
+
+    def __init__(self, obj={}, code_renderer=None):
         """
         Initialize block
         :param obj: dict - The value object for this block in tree
         :param code_renderer: instance of CodeRenderer
         """
         self.obj = obj
-        if isinstance(code_renderer, CodeRenderer):
+        if code_renderer and isinstance(code_renderer, CodeRenderer):
             self.codeRenderer = code_renderer
-        else:
+        elif code_renderer:
             raise Exception('Invalid Renderer')
 
     def get_template(self):
@@ -202,4 +211,27 @@ class Block(object):
         if len(inline_css) > 0:
             self.codeRenderer.add_css(dict_to_css({'#%s' % self.obj['id']: inline_css}))
 
+    def get_block_config(self):
+        """
+        Build minimal block using python
+        :return: dict / None - containing block info or None
+        """
+        if not self.external:
+            default_values = {
+                'settings': self.initial if self.initial else {},
+                'general': self.general_initial if self.general_initial else {}
+            }
 
+            result = {
+                "title": self.title,
+                "description": self.description,
+                "settings_schema": self.schema,
+                "default_values": default_values,
+                "config": {
+                    "styles": self.styles if self.styles else [{"id": 'default', "name": 'Default'}]
+                }
+
+            }
+            return result
+        else:
+            return None
