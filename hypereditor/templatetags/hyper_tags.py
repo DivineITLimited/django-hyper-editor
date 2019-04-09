@@ -22,8 +22,8 @@ class HyperNode(template.Node):
             code_renderer = CodeRenderer()
             bl_class = get_block_class_for(value.get('type', 'INVALID_PLUGIN_WITH_NO_TYPE'))
             if bl_class:
-                instance = bl_class(code_renderer)
-                return instance.render(value, context)
+                instance = bl_class(value, code_renderer)
+                return instance.render(context)
             else:
                 return ''
         elif isinstance(value, str):

@@ -88,6 +88,11 @@ class Block(object):
     js_files = None
 
     def __init__(self, obj, code_renderer):
+        """
+        Initialize block
+        :param obj: dict - The value object for this block in tree
+        :param code_renderer: instance of CodeRenderer
+        """
         self.obj = obj
         if isinstance(code_renderer, CodeRenderer):
             self.codeRenderer = code_renderer
@@ -95,29 +100,48 @@ class Block(object):
             raise Exception('Invalid Renderer')
 
     def get_template(self):
+        """
+        Determine which template to use. A block might have multiple style.
+        Each style has its own template.
+        :return: str - template name
+        """
         style = self.obj.get('general', {}).get('style', 'default')
         return 'hypereditor/blocks/{type}/{style}.html'.format(type=self.obj['type'], style=style)
 
-    def get_context(self, value, parent_context=None):
+    def get_context(self, parent_context=None):
+        """
+        Build Block Context. Assign parent context if has any.
+        :param parent_context: dict
+        :return: dict
+        """
         context = parent_context or {}
         context.update({
-            'self': value,
-            self.template_var: value,
+            'self': self.obj,
+            self.template_var: self.obj,
         })
         return context
 
     def get_rendered_children(self, context=None):
+        """
+        Blocks might have child blocks. Render children.
+        :param context: dict context for children
+        :return: safe str - Rendered string
+        """
         from hypereditor.blocks import get_block_class_for
         rendered_child = ''
         if self.obj.get('children') is not None:
             for child in self.obj.get('children'):
                 bl_class = get_block_class_for(child.get('type', 'INVALID_PLUGIN_WITH_NO_TYPE'))
                 if bl_class:
-                    instance = bl_class(self.codeRenderer)
+                    instance = bl_class(child, self.codeRenderer)
                     rendered_child = rendered_child + instance.render(child, context)
         return mark_safe(rendered_child)
 
     def _prepare_custom_codes(self):
+        """
+        If any extra css or js added from editor add them to code_renderer
+        :return: None
+        """
         if self.obj.get('extra'):
             if self.obj['extra'].get('cssCode'):
                 self.codeRenderer.add_css(self.obj['extra']['cssCode'])
@@ -125,10 +149,15 @@ class Block(object):
                 self.codeRenderer.add_css(self.obj['extra']['jsCode'])
 
     def render(self, context=None):
+        """
+        Render Block
+        :param context: dict - block context
+        :return: safe str: Rendered str
+        """
         if isinstance(context, Context) or isinstance(context, RequestContext):
             context = context.flatten()
         self._prepare_custom_codes()
-        self.generate_inline_css()
+        self.build_general_settings()
 
         rendered_child = self.get_rendered_children(context)
 
@@ -150,7 +179,11 @@ class Block(object):
 
         return mark_safe(render_to_string(template, new_context))
 
-    def generate_inline_css(self):
+    def build_general_settings(self):
+        """
+        General settings contains CSS properties. Add them to code_renderer
+        :return: None
+        """
         inline_css = {}
         if self.obj.get('general'):
             general = self.obj['general']
