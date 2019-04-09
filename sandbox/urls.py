@@ -17,10 +17,12 @@ from django.conf import settings
 from django.contrib import admin
 from django.urls import path, include
 from django.contrib.staticfiles.urls import staticfiles_urlpatterns
+from sandbox.example import views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('hypereditor/', include('hypereditor.urls')),
+    path('', views.TestFromView.as_view())
 ]
 
 if settings.DEBUG:
