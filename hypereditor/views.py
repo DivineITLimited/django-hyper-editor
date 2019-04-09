@@ -1,11 +1,21 @@
 import json
 
 from django.conf import settings
+from django.contrib.auth.mixins import UserPassesTestMixin, LoginRequiredMixin
 from django.views.generic import TemplateView
+
 from hypereditor.blocks import js_variable_str, get_js_plugins
 
 
-class EditorView(TemplateView):
+class AuthenticationMixin(UserPassesTestMixin, LoginRequiredMixin):
+    """Helper mixin for authentication on hyper editor urls"""
+
+    def test_func(self):
+        return self.request.user.is_superuser
+
+
+class EditorView(AuthenticationMixin, TemplateView):
+    """View for hyper editor inside iframe"""
 
     template_name = 'hypereditor/hyper_editor.html'
 
@@ -21,7 +31,9 @@ class EditorView(TemplateView):
         return context
 
 
-class PreviewView(TemplateView):
+class PreviewView(AuthenticationMixin, TemplateView):
+    """View for preview of a single block"""
+
     http_method_names = ['post']
     template_name = 'hypereditor/preview.html'
 
