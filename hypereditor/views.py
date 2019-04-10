@@ -1,18 +1,21 @@
 import json
 
-from django.conf import settings
-from django.http.response import HttpResponse
 from django.contrib.auth.mixins import UserPassesTestMixin, LoginRequiredMixin
+from django.utils.module_loading import import_string
 from django.views.generic import TemplateView
 
+from hypereditor import settings
 from hypereditor.blocks import js_variable_str, get_js_plugins, get_simpler_blocks
 
 
-class AuthenticationMixin(UserPassesTestMixin, LoginRequiredMixin):
+class AuthMixin(UserPassesTestMixin, LoginRequiredMixin):
     """Helper mixin for authentication on hyper editor urls"""
 
     def test_func(self):
         return self.request.user.is_superuser
+
+
+AuthenticationMixin = import_string(settings.AUTHENTICATION_MIXIN)
 
 
 class EditorView(AuthenticationMixin, TemplateView):
@@ -22,13 +25,11 @@ class EditorView(AuthenticationMixin, TemplateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        block_settings = getattr(settings, 'HYPER_EDITOR_BLOCK_CONFIG', {})
-        user_stylesheets = getattr(settings, 'HYPER_EDITOR_USER_STYLESHEETS', [])
-        context['block_settings'] = json.dumps(block_settings)
-        context['user_stylesheets'] = user_stylesheets
+        context['block_settings'] = json.dumps(settings.BLOCK_CONFIG)
+        context['user_stylesheets'] = settings.STYLESHEETS
         context['js_variables'] = js_variable_str
         context['js_plugins'] = get_js_plugins()
-        context['image_api_url'] = getattr(settings, 'HYPER_IMAGE_API', '#')
+        context['image_api_url'] = settings.IMAGE_API_URL
         return context
 
 
@@ -45,7 +46,6 @@ class PreviewView(AuthenticationMixin, TemplateView):
 
 
 class GenerateBlock(AuthenticationMixin, TemplateView):
-
     template_name = 'hypereditor/js/blocks.js'
 
     def options(self, request, *args, **kwargs):

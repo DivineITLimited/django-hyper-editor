@@ -1,5 +1,5 @@
 from importlib import import_module
-
+import collections
 from django.apps import apps
 from django.utils.module_loading import module_has_submodule
 
@@ -56,3 +56,17 @@ def load_hyper_blocks():
     for name, module in get_app_modules():
         if module_has_submodule(module, submodule_name):
             yield name, import_module('%s.%s' % (name, submodule_name))
+
+
+def merge_dict(d, m_d):
+    """
+    Given two dictionary, merge m_d dictionary into d
+    :param d: dict
+    :param m_d: dict
+    :return: None
+    """
+    for k, v in m_d.items():
+        if k in d and isinstance(d[k], dict) and isinstance(d[k], collections.Mapping):
+            merge_dict(d[k], m_d[k])
+        else:
+            d[k] = m_d[k]
