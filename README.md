@@ -48,4 +48,4 @@ Please check the documentation site - [https://django-hyper-editor.readthedocs.i
 ## License
 MIT
 
-<sub><sup>Made with :heart: at [Divine IT Limited](https://divineit.net/), Dhaka, Bangladesh</sup></sub>
+<sub>Made with :heart: at [Divine IT Limited](https://divineit.net/), Dhaka, Bangladesh</sup>
