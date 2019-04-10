@@ -1,6 +1,6 @@
 # Django Hyper Editor
 
-Django integration for [Hyper Editor](https://django-hyper-editor.readthedocs.io/en/latest/).
+Django integration for [Hyper Editor](https://github.com/divineitlimited/hyper-editor).
 
 
 ## Installation
@@ -29,7 +29,7 @@ urlpatterns = [
 
 ## Documentation
 
-Please check the documentation site - [https://divineitlimited.github.io/django-hyper-editor](https://divineitlimited.github.io/django-hyper-editor)
+Please check the documentation site - [https://django-hyper-editor.readthedocs.io/en/latest/](https://django-hyper-editor.readthedocs.io/en/latest/)
 
 ## TODO
 - [x] Hyper Editor Output Parser
