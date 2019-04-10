@@ -1,6 +1,8 @@
 from django.conf import settings
+from django.apps import apps
 from hypereditor import utils
 
+WAGTAIL_EXISTS = apps.is_installed('wagtail.core')
 
 HYPER_SETTINGS = {
     'BLOCK_CONFIG': {},

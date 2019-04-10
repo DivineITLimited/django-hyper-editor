@@ -6,8 +6,9 @@ from django import forms, template
 from django.db import models
 from django.utils.safestring import mark_safe
 
-from .blocks import get_block_class_for
-from .blocks.base import CodeRenderer
+from hypereditor.blocks import get_block_class_for
+from hypereditor.blocks.base import CodeRenderer
+from hypereditor import settings
 from django.template.loader import render_to_string
 
 
@@ -56,6 +57,22 @@ class HyperFieldResponse(object):
         return self.get_prep_value()
 
 
+if settings.WAGTAIL_EXISTS:
+    from wagtail.admin.edit_handlers import FieldPanel
+
+
+    class HyperEditorFieldPanel(FieldPanel):
+        object_template = "hypereditor/edit_handlers/hyper_editor_field_panel.html"
+
+        def render_as_object(self):
+            return mark_safe(render_to_string(self.object_template, {
+                'self': self,
+                self.TEMPLATE_VAR: self,
+                'field': self.bound_field,
+                'identifier': ''.join(random.choices(string.ascii_uppercase + string.digits, k=6))
+            }))
+
+
 class HyperField(models.Field):
 
     def get_internal_type(self):
@@ -92,3 +109,8 @@ class HyperField(models.Field):
     def value_to_string(self, obj):
         value = self.value_from_object(obj)
         return self.get_prep_value(value)
+
+    if settings.WAGTAIL_EXISTS:
+
+        def get_panel(self):
+            return HyperFieldPanel

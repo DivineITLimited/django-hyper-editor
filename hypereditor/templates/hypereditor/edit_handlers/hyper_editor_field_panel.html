@@ -1,0 +1,22 @@
+{% load wagtailadmin_tags static %}
+
+{% with 'hef_'|add:identifier as field_id %}
+    {% with 'hei_'|add:identifier as iframe_id %}
+
+        <fieldset style="margin-right:0px;width: 100%;max-width: 100%;">
+
+            <legend>{{ self.heading }}</legend>
+
+            <ul class="fields">
+                <li id="{{ field_id }}" , style="display:none">
+                    {% include "wagtailadmin/shared/field.html" with show_label=False show_help_text=False %}
+                </li>
+            </ul>
+
+            {% include 'hypereditor/partials/editor_iframe.html' with field_id=field_id iframe_id=iframe_id %}
+
+        </fieldset>
+
+    {% endwith %}
+{% endwith %}
+

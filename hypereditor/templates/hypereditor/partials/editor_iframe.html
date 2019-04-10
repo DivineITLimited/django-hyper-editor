@@ -1,0 +1,73 @@
+<iframe name="editorIframe" src="#" frameborder="0" width="100%" marginheight="0" marginwidth="0"
+        id="{{ iframe_id }}"></iframe>
+
+<script>
+    (function () {
+        var field_id = '{{ field_id }}'
+        var iframe_id = '{{ iframe_id }}'
+
+        function guid() {
+            function s4() {
+                return Math.floor((1 + Math.random()) * 0x10000)
+                    .toString(16)
+                    .substring(1);
+            }
+
+            return s4() + s4() + '-' + s4() + '-' + s4() + '-' + s4() + '-' + s4() + s4() + s4();
+        }
+
+        // generate an unique id param
+        var id = guid()
+
+        // initialize iframe
+        var iframe = document.querySelector('#' + iframe_id);
+        iframe.src = '{% url 'hypereditor:editor' %}' + '?id=' + id
+
+        // get iframe window object
+        var iframeWindow = (iframe.contentWindow || iframe.contentDocument);
+
+        function getHiddenEditor() {
+            return document.querySelector('#' + field_id + ' #hyperHiddenField')
+        }
+
+        // get hidden textarea
+        var hiddenEditor = getHiddenEditor()
+
+        // polyfill window localtion origin
+        if (!window.location.origin) {
+            window.location.origin = window.location.protocol + "//"
+                + window.location.hostname
+                + (window.location.port ? ':' + window.location.port : '');
+        }
+
+        function set_height() {
+            var height = Math.max(iframe.contentWindow.document.body.scrollHeight, 500)
+            iframe.height = height + "px"
+        }
+
+        iframe.onload = function () {
+
+            if (hiddenEditor.value && hiddenEditor.value != '') {
+                iframeWindow.postMessage({
+                    id: id,
+                    state: hiddenEditor.value
+                }, window.location.origin)
+            } else {
+                iframeWindow.postMessage({
+                    id: id,
+                    state: '[]'
+                }, window.location.origin)
+            }
+
+            window.addEventListener('message', function (e) {
+                if (e.data && e.data.id == id) {
+                    getHiddenEditor().value = e.data.state
+                    set_height()
+                }
+
+            }, false);
+
+            set_height()
+        }
+    })()
+</script>
