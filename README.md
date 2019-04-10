@@ -2,6 +2,8 @@
 
 Django integration for [Hyper Editor](https://github.com/divineitlimited/hyper-editor).
 
+[![Documentation Status](https://readthedocs.org/projects/django-hyper-editor/badge/?version=latest)](https://django-hyper-editor.readthedocs.io/en/latest/?badge=latest)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
 ## Installation
 
@@ -42,3 +44,8 @@ Please check the documentation site - [https://django-hyper-editor.readthedocs.i
 - [x] Template tag for preview and render
 - [x] Documentation
 - [ ] Media Handling
+
+## License
+MIT
+
+<sub><sup>Made with :heart: at [Divine IT Limited](https://divineit.net/), Dhaka, Bangladesh</sup></sub>
