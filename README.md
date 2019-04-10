@@ -27,4 +27,16 @@ urlpatterns = [
 ]
 ```
 
-Current version 0.1.0-rc.1
+Current version 0.1.0-rc.2
+
+## TODO
+- [x] Hyper Editor Output Parser
+- [x] Block System
+- [x] Create simple block without using js
+- [x] Django Model Integration ``HyperField``
+- [x] Django Admin Integration
+- [x] Django Form Integration
+- [x] Wagtail Integration ``HyperFieldPanel``
+- [x] Template tag for preview and render
+- [ ] Media Handling
+- [ ] Documentation
