@@ -1,6 +1,6 @@
 # Django Hyper Editor
 
-Django integration for [Hyper Editor](https://github.com/divineitlimited/hyper-editor).
+Django integration for [Hyper Editor](https://django-hyper-editor.readthedocs.io/en/latest/).
 
 
 ## Installation
