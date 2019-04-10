@@ -1,0 +1,11 @@
+site_name: Django Hyper Editor
+site_description: Django integration of Hyper Editor
+site_author: Shimul Chowdhury
+copyright: Copyright &copy; 2019 <a href="https://divineit.net">Divine IT Limited</a>
+repo_url: https://github.com/DivineITLimited/django-hyper-editor
+theme: readthedocs
+nav:
+    - 'Introduction': 'readme.md'
+    - 'Usage': 'usage.md'
+    - 'Blocks': 'blocks.md'
+    - 'Wagtail': 'wagtail.md'
