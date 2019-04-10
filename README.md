@@ -27,8 +27,6 @@ urlpatterns = [
 ]
 ```
 
-Current version 0.1.0-rc.3
-
 ## TODO
 - [x] Hyper Editor Output Parser
 - [x] Block System

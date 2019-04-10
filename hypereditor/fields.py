@@ -61,7 +61,7 @@ if settings.WAGTAIL_EXISTS:
     from wagtail.admin.edit_handlers import FieldPanel
 
 
-    class HyperEditorFieldPanel(FieldPanel):
+    class HyperFieldPanel(FieldPanel):
         object_template = "hypereditor/edit_handlers/hyper_editor_field_panel.html"
 
         def render_as_object(self):
