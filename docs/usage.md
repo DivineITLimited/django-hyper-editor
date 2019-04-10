@@ -69,7 +69,7 @@ class PageAdmin(admin.ModelAdmin):
 
 You need to use ``hyper_tags`` in your template in order to display Hyper Editor Generated Contents.
 
-```djangotemplate
+```html
 {% load hyper_tags %}
 
 {% hyper_render page.content %}

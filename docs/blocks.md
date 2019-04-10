@@ -82,9 +82,11 @@ Your folder structure should look like following -
 It might look like a bit much, but we found it helps us separating when there are lots of blocks.
 
 Now add following in your template -
-```djangotemplate
+```html
 <{{ obj.settings.type }}>
+
     {{ obj.settings.text }}
+
 </{{ obj.settings.type }}>
 ```
 
