@@ -143,7 +143,7 @@ class Block(object):
                 bl_class = get_block_class_for(child.get('type', 'INVALID_PLUGIN_WITH_NO_TYPE'))
                 if bl_class:
                     instance = bl_class(child, self.codeRenderer)
-                    rendered_child = rendered_child + instance.render(child, context)
+                    rendered_child = rendered_child + instance.render(context)
         return mark_safe(rendered_child)
 
     def _prepare_custom_codes(self):
