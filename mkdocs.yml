@@ -5,7 +5,7 @@ copyright: Copyright &copy; 2019 <a href="https://divineit.net">Divine IT Limite
 repo_url: https://github.com/DivineITLimited/django-hyper-editor
 theme: readthedocs
 nav:
-    - 'Introduction': 'readme.md'
+    - 'Introduction': 'index.md'
     - 'Usage': 'usage.md'
     - 'Blocks': 'blocks.md'
     - 'Wagtail': 'wagtail.md'
