@@ -13,6 +13,7 @@ setup(
     license='MIT',
     description='Hyper Editor Integration With Django',
     long_description=README,
+    long_description_content_type='text/markdown',
     author='Shimul Chowdhury',
     author_email='shimul@divine-it.net',
     install_requires=[
