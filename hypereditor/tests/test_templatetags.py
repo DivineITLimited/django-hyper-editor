@@ -28,3 +28,4 @@ class HyperPreviewTemplateTagTest(SimpleTestCase):
         )
         rendered_template = template_to_render.render(context)
         self.assertInHTML('<div id="i1554530213_4">\nSample Text\n</div>', rendered_template)
+

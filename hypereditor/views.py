@@ -2,10 +2,11 @@ import json
 
 from django.contrib.auth.mixins import UserPassesTestMixin, LoginRequiredMixin
 from django.utils.module_loading import import_string
-from django.views.generic import TemplateView
+from django.views.generic import TemplateView, View
+from django.http.response import JsonResponse
 
 from hypereditor import settings
-from hypereditor.blocks import js_variable_str, get_js_plugins, get_simpler_blocks
+from hypereditor.blocks import js_variable_str, get_js_plugins, get_simpler_blocks, get_chooser_for
 
 
 class AuthMixin(UserPassesTestMixin, LoginRequiredMixin):
@@ -57,3 +58,19 @@ class GenerateBlock(AuthenticationMixin, TemplateView):
         return self.render_to_response(context={
             'blocks': get_simpler_blocks()
         })
+
+
+class ChooserAPIView(AuthenticationMixin, View):
+
+    def get(self, request, chooser_type, *args, **kwargs):
+        chooser_cls = get_chooser_for(chooser_type)
+        q = request.GET.get('q')
+        page = request.GET.get('page', 1)
+
+        if chooser_cls:
+            chooser = chooser_cls()
+            result = chooser.paginate(request, q, page=page)
+
+            return JsonResponse(result, status=200)
+        else:
+            return JsonResponse({'message': 'Invalid chooser'}, status=400)

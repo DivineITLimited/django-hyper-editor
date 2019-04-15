@@ -1,9 +1,15 @@
-from .base import Block
 import json
+
 from django.conf import settings
 
+from hypereditor.blocks.base import Block
+from hypereditor.blocks.chooser import Chooser
+
 BLOCK_REGISTRY = {}
+
 EXCLUDED_LIST = getattr(settings, 'HYPER_EDITOR_EXCLUDE_BLOCKS', [])
+
+CHOOSER_REGISTRY = {}
 
 
 def register_block(block_type, block_class):
@@ -19,12 +25,23 @@ def register_block(block_type, block_class):
         raise Exception('%s is not a valid block class' % block_class)
 
 
+def register_chooser_field(page_chooser, chooser_cls):
+    if issubclass(chooser_cls, Chooser):
+        CHOOSER_REGISTRY[page_chooser] = chooser_cls
+    else:
+        raise Exception('%s is not a valid chooser' % chooser_cls)
+
+
 def get_block_class_for(block_type):
     """Get a block from registry by type
     :param block_type: str
     :return: Block
     """
     return BLOCK_REGISTRY.get(block_type, Block)
+
+
+def get_chooser_for(chooser_type):
+    return CHOOSER_REGISTRY.get(chooser_type)
 
 
 def js_variable_str():
@@ -66,4 +83,10 @@ def register(block_type):
     """
     def wrap(cls):
         register_block(block_type, cls)
+    return wrap
+
+
+def register_chooser(chooser_type):
+    def wrap(cls):
+        register_chooser_field(chooser_type, cls)
     return wrap
