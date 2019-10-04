@@ -27,9 +27,10 @@ class ColumnBlock(Block):
                     col_class.append('-'.join(tmp_off))
         return ' '.join(col_class)
 
-    def get_context(self, value, parent_context=None):
+    def get_context(self, parent_context=None):
+        value = parent_context.get('obj')
         value['colClass'] = self._build_col_class(value.get('settings'))
-        context = super().get_context(value, parent_context=parent_context)
+        context = super().get_context(parent_context=parent_context)
         return context
 
 

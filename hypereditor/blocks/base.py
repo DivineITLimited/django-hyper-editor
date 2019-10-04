@@ -23,10 +23,16 @@ class CodeRenderer(object):
                 self.js.append(js)
 
     def render_css(self):
-        return '<style type="text/css">' + '\n'.join(self.css) + '</style>'
+        return '\n'.join(self.css)
+
+    def render_css_with_tag(self):
+        return '<style type="text/css">' + self.render_css() + '</style>'
 
     def render_js(self):
-        return '<script type="text/javascript">'+'\n'.join(self.js)+'</script>'
+        return '\n'.join(self.js)
+
+    def render_js_with_tag(self):
+        return '<script type="text/javascript">'+self.render_js()+'</script>'
 
 
 def _build_background_image(image):

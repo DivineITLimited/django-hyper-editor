@@ -36,7 +36,20 @@ class HyperFieldResponse(object):
         data = json.loads(str_data)
         return HyperFieldResponse(data)
 
-    def render(self, context=None):
+    def render(self, contex=None):
+        code_renderer, rendered_data = self.__render(context=contex)
+        rendered_data = code_renderer.render_css_with_tag() + rendered_data + code_renderer.render_js_with_tag()
+        return mark_safe(rendered_data)
+
+    def api_render(self, context=None):
+        code_renderer, rendered_data = self.__render(context=context)
+        return {
+            'css': mark_safe(code_renderer.render_css()),
+            'html': mark_safe('rendered_data'),
+            'js': mark_safe(code_renderer.render_js())
+        }
+
+    def __render(self, context=None):
         rendered_data = ''
         if isinstance(context, template.Context) or isinstance(context, template.RequestContext):
             context = context.flatten()
@@ -46,9 +59,8 @@ class HyperFieldResponse(object):
             if bl_class:
                 instance = bl_class(item, code_renderer)
                 rendered_data = rendered_data + instance.render(context)
+        return code_renderer, rendered_data
 
-        rendered_data = code_renderer.render_css() + rendered_data + code_renderer.render_js()
-        return mark_safe(rendered_data)
 
     def get_prep_value(self):
         return json.dumps(self.data)
