@@ -109,7 +109,7 @@
 
         // create instance of hyper editor
         hyperEditor = new HyperEditor('#hyperEditor', {
-            imageSearchApi: "#", // image search does not work for now
+            imageSearchApi: {% if image_api_url %}"{{ image_api_url }}"{% else %} "#" {% endif %},
             preview: async_preview {% if block_settings %}, blocks: JSON.parse('{{ block_settings|safe }}') {% endif %}
         })
     </script>
